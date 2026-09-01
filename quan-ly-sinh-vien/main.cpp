@@ -16,6 +16,8 @@ void inSinhVien(const SinhVien &sv);
 void hienThiDanhSach(const vector<SinhVien> &ds);
 void timKiemSinhVien(const vector<SinhVien> &ds);
 void sapxep(vector<SinhVien> &ds);
+void suathongtin(vector<SinhVien> &ds);
+void xoathongtin(vector<SinhVien> &ds);
 
 int main() {
     vector<SinhVien> dsSinhVien;
@@ -29,6 +31,8 @@ int main() {
         cout << "2. Hien thi danh sach sinh vien\n";
         cout << "3. Tim kiem sinh vien\n";
         cout << "4. Sap xep sinh theo diem trung binh cao den thap\n";
+        cout << "5. Sua thong tin sinh vien\n";
+        cout << "6. Xoa thong tin sinh vien\n";
         cout << "0. Thoat\n";
         cout << "------------------------------------\n";
         cout << "Nhap lua chon cua ban: ";
@@ -50,6 +54,12 @@ int main() {
                 break;
             case 4:
                 sapxep(dsSinhVien);
+                break;
+            case 5:
+                suathongtin(dsSinhVien);
+                break;
+            case 6:
+                xoathongtin(dsSinhVien);
                 break;
             case 0:
                 cout << "Cam on ban da su dung chuong trinh!\n";
@@ -130,4 +140,57 @@ void sapxep(vector<SinhVien> &ds){
         }
     }
     hienThiDanhSach(ds);
+}
+
+void suathongtin(vector<SinhVien> &ds){
+    if(ds.empty()){
+        return;
+    }
+    bool timthay =false;
+    string id;
+    cout<<"Nhap ma so sinh vien can sua: ";
+    cin>>id;
+    for(int i=0;i<ds.size();i++){
+        if(ds[i].maSV==id){
+            cout<<"\n--- Nhap thong tin moi cho sinh vien "<<ds[i].maSV<<" ---\n";
+            cout<<"Ho ten moi: ";
+            cin.ignore();
+            getline(cin,ds[i].hoTen);
+            cout<<"Diem trung binh moi: ";
+            cin>>ds[i].diemTB;
+            timthay = true;
+            break;
+        }
+    }
+    if(timthay==false){
+        cout<<"khong tim thay sinh vien hop le!\n";
+    }
+}
+
+void xoathongtin(vector<SinhVien> &ds){
+    if(ds.empty()){
+        return;
+    }
+    bool timthay=false;
+    string id;
+    cout<<"Nhap sinh vien can xoa: ";
+    cin>>id;
+    int vitrixoa =-1;
+    for(int i=0;i<ds.size();i++){
+        if(id==ds[i].maSV){
+            vitrixoa=i;
+            break;
+        }
+    }
+    if(vitrixoa!=-1){
+        for(int i=vitrixoa; i<ds.size()-1;i++){
+            ds[i]=ds[i+1];
+        }
+        ds.pop_back();
+        cout<<"da xoa sinh vien "<< id<<endl;
+    }
+    else{
+        cout<<"khong co thong tin sinh vien can xoa!\n";
+    }
+
 }
