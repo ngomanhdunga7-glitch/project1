@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <fstream>
 
 using namespace std;
 
@@ -18,11 +19,14 @@ void timKiemSinhVien(const vector<SinhVien> &ds);
 void sapxep(vector<SinhVien> &ds);
 void suathongtin(vector<SinhVien> &ds);
 void xoathongtin(vector<SinhVien> &ds);
+void luuFile(const vector<SinhVien> &ds, const string &path);
+void docFile(vector<SinhVien> &ds, const string &path);
 
 int main() {
     vector<SinhVien> dsSinhVien;
     int luaChon;
-
+    string fileName = "danhsach_sv.txt";
+    docFile(dsSinhVien, fileName);
     do {
         cout << "\n====================================\n";
         cout << "   CHUONG TRINH QUAN LY SINH VIEN   \n";
@@ -33,6 +37,7 @@ int main() {
         cout << "4. Sap xep sinh theo diem trung binh cao den thap\n";
         cout << "5. Sua thong tin sinh vien\n";
         cout << "6. Xoa thong tin sinh vien\n";
+        cout << "7. Luu du lieu vao file\n";
         cout << "0. Thoat\n";
         cout << "------------------------------------\n";
         cout << "Nhap lua chon cua ban: ";
@@ -60,6 +65,9 @@ int main() {
                 break;
             case 6:
                 xoathongtin(dsSinhVien);
+                break;
+            case 7:
+                luuFile(dsSinhVien, fileName);
                 break;
             case 0:
                 cout << "Cam on ban da su dung chuong trinh!\n";
@@ -193,4 +201,36 @@ void xoathongtin(vector<SinhVien> &ds){
         cout<<"khong co thong tin sinh vien can xoa!\n";
     }
 
+}
+
+void luuFile(const vector<SinhVien> &ds, const string &path){
+    ofstream raFile(path);
+    raFile<<ds.size()<<endl;
+    for(int i=0;i<ds.size();i++){
+        raFile<<ds[i].maSV<<endl;
+        raFile<<ds[i].hoTen<<endl;
+        raFile<<ds[i].diemTB<<endl;
+    }
+    raFile.close();
+    cout<<"luu du lieu vao file thanh cong!\n";
+}
+
+void docFile(vector<SinhVien> &ds, const string &path){
+    ifstream vaoFile(path);
+    int soluong;
+    if(!(vaoFile>>soluong)){
+        vaoFile.close();
+        return;
+    }
+    ds.clear();
+    for(int i=0;i<soluong;i++){
+        SinhVien sv;
+        vaoFile>>sv.maSV;
+        vaoFile.ignore();
+        getline(vaoFile,sv.hoTen);
+        vaoFile>>sv.diemTB;
+        ds.push_back(sv);
+    }
+    vaoFile.close();
+    cout << "📂 Đã tự động nạp " << ds.size() << " sinh viên từ dữ liệu cũ!\n";
 }
